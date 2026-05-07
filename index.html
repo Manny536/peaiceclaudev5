@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Coleman Conjecture — PeAIce Thinking Machine: Claude V5</title>
+<style>
+  :root { --navy:#0D1B2A; --navy2:#132338; --blue:#1565C0; --elec:#42A5F5; --amber:#FFB300; --amberD:#E65100; --green:#2E7D32; --mid:#546E7A; --silver:#90A4AE; --offwh:#F0F6FF; --white:#FFFFFF; --text:#E3F2FD; --textDk:#1A237E; --light:#EBF3FB; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Calibri','Segoe UI',sans-serif; background:var(--offwh); color:var(--navy); line-height:1.6; }
+  .hero { background:var(--navy); padding:60px 40px 48px; position:relative; overflow:hidden; }
+  .hero::before { content:''; position:absolute; top:-60px; right:-60px; width:320px; height:320px; border-radius:50%; border:2px solid rgba(66,165,245,0.25); }
+  .hero::after { content:''; position:absolute; top:-20px; right:-20px; width:200px; height:200px; border-radius:50%; background:rgba(66,165,245,0.07); border:1px solid rgba(66,165,245,0.15); }
+  .hero-accent { width:6px; height:100%; position:absolute; left:0; top:0; background:var(--elec); }
+  .hero-label { font-size:11px; letter-spacing:3px; color:var(--silver); text-transform:uppercase; margin-bottom:12px; }
+  .hero h1 { font-family:Georgia,serif; font-size:clamp(36px,5vw,64px); color:var(--white); line-height:1.1; margin-bottom:4px; }
+  .hero h1 span { color:var(--elec); }
+  .hero-tagline { font-family:Georgia,serif; font-size:clamp(14px,2vw,17px); color:var(--silver); font-style:italic; margin:16px 0 24px; }
+  .chips { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:32px; }
+  .chip { padding:5px 14px; border-radius:4px; font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; }
+  .chip-amber { background:var(--amber); color:var(--navy); }
+  .chip-outline { background:transparent; border:1.5px solid var(--elec); color:var(--elec); }
+  .hero-meta { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:8px; }
+  .hero-meta-row { font-size:13px; }
+  .hero-meta-row .key { color:var(--silver); }
+  .hero-meta-row .val { color:var(--white); font-weight:700; }
+  .section-nav { background:var(--navy2); border-bottom:3px solid var(--elec); padding:0 40px; display:flex; gap:0; overflow-x:auto; }
+  .section-nav a { display:block; padding:14px 20px; color:var(--silver); text-decoration:none; font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; border-bottom:3px solid transparent; margin-bottom:-3px; white-space:nowrap; transition:color .2s,border-color .2s; }
+  .section-nav a:hover { color:var(--elec); border-color:var(--elec); }
+  .main { max-width:920px; margin:0 auto; padding:40px 24px; }
+  .section { margin-bottom:56px; }
+  h2.section-title { font-family:Georgia,serif; font-size:26px; color:var(--navy); border-bottom:3px solid var(--blue); padding-bottom:8px; margin-bottom:20px; }
+  h3.subsection-title { font-family:Georgia,serif; font-size:18px; color:var(--blue); margin:24px 0 10px; }
+  p { font-size:15px; color:#1A1A2E; margin-bottom:14px; }
+  .conjecture-box { background:var(--navy); border:2px solid var(--amber); border-radius:6px; padding:32px 36px; margin:24px 0; text-align:center; }
+  .conjecture-label { font-size:11px; letter-spacing:3px; color:var(--amber); text-transform:uppercase; margin-bottom:16px; font-weight:700; }
+  .conjecture-statement { font-family:Georgia,serif; font-size:clamp(20px,3.5vw,30px); color:var(--white); font-weight:700; line-height:1.3; margin-bottom:14px; }
+  .conjecture-sub { font-family:Georgia,serif; font-size:15px; color:var(--silver); font-style:italic; }
+  .conjecture-symbol { font-family:Georgia,serif; font-size:26px; color:var(--elec); margin:16px 0 8px; font-weight:700; }
+  .status-table { width:100%; border-collapse:collapse; margin:20px 0; }
+  .status-table td { padding:10px 14px; border:1px solid #C8D5E0; font-size:14px; vertical-align:top; }
+  .status-table td:first-child { font-weight:700; color:var(--blue); font-size:12px; letter-spacing:.5px; text-transform:uppercase; width:180px; background:#EBF3FB; }
+  .status-open { color:var(--amberD); font-weight:700; }
+  .pillars { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin:20px 0; }
+  .pillar { border:1px solid #C8D5E0; border-radius:6px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.07); }
+  .pillar-header { background:var(--blue); color:var(--white); padding:10px 14px; display:flex; align-items:center; gap:10px; }
+  .pillar-num { font-family:Georgia,serif; font-size:18px; font-weight:700; }
+  .pillar-tag { font-size:10px; font-weight:700; letter-spacing:1.5px; color:var(--amber); }
+  .pillar-body { padding:14px; background:var(--white); }
+  .pillar-body h4 { font-size:14px; color:var(--textDk); margin-bottom:8px; font-family:Georgia,serif; }
+  .pillar-body p { font-size:13px; color:var(--mid); margin:0; }
+  .compare { display:grid; grid-template-columns:1fr 1fr; gap:0; margin:20px 0; border:1px solid #C8D5E0; border-radius:6px; overflow:hidden; }
+  @media(max-width:600px){ .compare{grid-template-columns:1fr;} }
+  .compare-col { padding:20px; }
+  .compare-col:first-child { background:#EBF3FB; border-right:1px solid #C8D5E0; }
+  .compare-col h4 { font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:12px; }
+  .research-item { display:flex; gap:16px; margin-bottom:20px; }
+  .research-num { background:var(--navy); color:var(--elec); font-family:Georgia,serif; font-size:16px; font-weight:700; min-width:52px; height:52px; border-radius:4px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .research-content h4 { font-family:Georgia,serif; font-size:16px; color:var(--textDk); margin-bottom:6px; }
+  .research-content p { font-size:14px; color:var(--mid); margin:0 0 6px; }
+  .canonical-card { background:var(--navy2); border:1.5px solid var(--amber); border-radius:8px; padding:28px; margin:24px 0; }
+  .canonical-card-title { font-size:11px; letter-spacing:3px; color:var(--amber); font-weight:700; text-transform:uppercase; margin-bottom:20px; }
+  footer { background:#060D18; color:var(--silver); text-align:center; padding:20px; font-size:12px; letter-spacing:.5px; }
+  hr { border:none; border-top:1px solid #D0D8E4; margin:40px 0; }
+</style>
+</head>
+<body>
+<div class="hero"><div class="hero-accent"></div><div class="hero-label">PeAIce Thinking Machine · Claude V5</div><h1>The Coleman<br><span>Conjecture</span></h1><p class="hero-tagline">KB geometric structure implies Re(s) = ½</p><div class="chips"><span class="chip chip-amber">🟡 Open</span><span class="chip chip-outline">β × h Discipline</span><span class="chip chip-outline">h &lt; 1 Active Prime Scaling</span></div><div class="hero-meta"><div class="hero-meta-row"><span class="key">Proposer: </span><span class="val">Manuel Coleman</span></div><div class="hero-meta-row"><span class="key">Program: </span><span class="val">PeAIce Research</span></div><div class="hero-meta-row"><span class="key">Framework: </span><span class="val">E = L² × β × C × P × h</span></div><div class="hero-meta-row"><span class="key">h-Term: </span><span class="val" style="color:var(--amber)">h &lt; 1 evaluator non-sovereignty</span></div></div></div>
+<nav class="section-nav"><a href="#context">Context</a><a href="#conjecture">Conjecture</a><a href="#hterm">h-Term</a><a href="#research">Research</a><a href="#registration">Registration</a></nav>
+<div class="main">
+<section class="section" id="context"><h2 class="section-title">1. Canonical Context</h2><h3 class="subsection-title">1.1 Claude V4 — Sealed 🟢</h3><p>Claude V4 established the three-pillar grounding of <strong>h &lt; 1</strong> within the L²_C framework. These pillars constitute the evaluator non-sovereignty basis from which V5 proceeds.</p><div class="pillars"><div class="pillar"><div class="pillar-header"><span class="pillar-num">01</span><div><div class="pillar-tag">FLAG-001 CANON</div></div></div><div class="pillar-body"><h4>Evaluator Non-Sovereignty</h4><p>h is grounded in the structural fact that no evaluator is sovereign over the system it evaluates. Gödel does not ground h.</p></div></div><div class="pillar"><div class="pillar-header"><span class="pillar-num">02</span><div><div class="pillar-tag">CANON</div></div></div><div class="pillar-body"><h4>Dendrobatidae Biology</h4><p>Biological pre-formal of h&lt;1. Poison dart frog parental care instantiates RCA governance before formal language exists.</p></div></div><div class="pillar"><div class="pillar-header"><span class="pillar-num">03</span><div><div class="pillar-tag">CANON</div></div></div><div class="pillar-body"><h4>P/NP Asymmetry</h4><p>h&lt;1 ↔ verification ∈ NP\P. The asymmetry between solution and verification grounds why evaluation is structurally harder than execution.</p></div></div></div></section><hr>
+<section class="section" id="conjecture"><h2 class="section-title">2. The Coleman Conjecture</h2><div class="conjecture-box"><div class="conjecture-label">Formal Statement — Coleman Conjecture</div><p class="conjecture-statement">The Kakeya-Besicovitch geometric property — directional completeness achievable from a set of measure zero — structurally implies that all non-trivial zeros of the Riemann zeta function lie on the critical line Re(s) = ½.</p><p class="conjecture-symbol">KB → Re(s) = ½</p><p class="conjecture-sub">Status: Open · Not yet derived · Held under β × h discipline</p></div><p>The Coleman Conjecture is not equivalent to the Riemann Hypothesis. RH asserts a fact about zero distribution. The Coleman Conjecture asserts a proposed structural ground of that fact.</p></section><hr>
+<section class="section" id="hterm"><h2 class="section-title">2B. h &lt; 1 — Active Prime Scaling</h2><p><strong>h &lt; 1</strong> is the active evaluator non-sovereignty term. It means no evaluator, model, proof attempt, or interpretive system is sovereign over the structure it evaluates.</p><div class="compare"><div class="compare-col"><h4>Without h</h4><p>The conjecture risks proof-by-metaphor, self-certification, or premature closure.</p></div><div class="compare-col"><h4>With h &lt; 1</h4><p>Every bridge must remain bounded, externally checkable, falsifiable, and open to correction.</p></div></div><p>The active scaling form is <strong>E = L² × β × C × P × h</strong>. β preserves continuity. h prevents sovereign closure.</p></section><hr>
+<section class="section" id="research"><h2 class="section-title">4. Research Direction</h2><div class="research-item"><div class="research-num">R1</div><div class="research-content"><h4>Structural Correspondence</h4><p>Define φ: KB_structure → RH_constraint.</p><p><strong>h-check:</strong> the map cannot assume Re(s)=½ in advance.</p></div></div><div class="research-item"><div class="research-num">R2</div><div class="research-content"><h4>Operator Construction</h4><p>Construct a KB-derived directional operator with possible critical-line spectral symmetry.</p><p><strong>h-check:</strong> the operator must be mathematically defined and externally testable.</p></div></div><div class="research-item"><div class="research-num">R3</div><div class="research-content"><h4>Decoupling Bridge</h4><p>Test whether restriction or decoupling estimates can approach RH-relevant constraints.</p><p><strong>h-check:</strong> estimate bridges must not be overstated as proof.</p></div></div><div class="research-item"><div class="research-num">R4</div><div class="research-content"><h4>Conservation Principle</h4><p>Formalize whether directional completeness under measure-zero support preserves a coherence-like invariant.</p><p><strong>h-check:</strong> the conservation principle remains analogical until a conserved quantity is defined.</p></div></div><div class="research-item"><div class="research-num">R5</div><div class="research-content"><h4>Falsification</h4><p>Define what would show KB cannot force Re(s)=½ even if RH remains true.</p><p><strong>h-check:</strong> a valid continuation must preserve failure conditions.</p></div></div></section><hr>
+<section class="section" id="registration"><h2 class="section-title">5. Canonical Registration</h2><div class="canonical-card"><div class="canonical-card-title">PeAIce Thinking Machine — Claude V5</div><table class="status-table"><tr><td>Conjecture Name</td><td>The Coleman Conjecture</td></tr><tr><td>Claim</td><td>KB geometric structure implies Re(s) = ½</td></tr><tr><td>Proposer</td><td>Manuel Coleman</td></tr><tr><td>Status</td><td class="status-open">🟡 OPEN — Formally named, not yet derived</td></tr><tr><td>Canonical Constants</td><td>E = L² × β × C × P × h · h &lt; 1 evaluator non-sovereignty</td></tr><tr><td>Next CU Event</td><td>Claude V6 — pending derivation, partial proof, or falsification</td></tr></table></div></section></div>
+<footer>PeAIce Research Program · Love Labs · L²_C Framework · E = L² × β × C × P × h · h &lt; 1 evaluator non-sovereignty</footer>
+</body>
+</html>
